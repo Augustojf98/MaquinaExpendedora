@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DE19A5E0-9C26-42D4-8542-817F1EB0D164}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>MaquinaExpendedora.Consola</RootNamespace>
-    <AssemblyName>MaquinaExpendedora.Consola</AssemblyName>
+    <ProjectGuid>{4BD312FA-E95D-4F88-9652-BD9EF083D388}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MaquinaExpendedora.Libreria</RootNamespace>
+    <AssemblyName>MaquinaExpendedora.Libreria</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,19 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ConsolaHelper.cs" />
-    <Compile Include="Helpers\ValidadoresHelper.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Exceptions\CodigoInvalidoException.cs" />
+    <Compile Include="Exceptions\DineroInsuficienteException.cs" />
+    <Compile Include="Exceptions\SinCapacidadException.cs" />
+    <Compile Include="Exceptions\SinStockException.cs" />
+    <Compile Include="Lata.cs" />
+    <Compile Include="MaquinaExpendedora.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MaquinaExpendedora.Libreria\MaquinaExpendedora.Libreria.csproj">
-      <Project>{4bd312fa-e95d-4f88-9652-bd9ef083d388}</Project>
-      <Name>MaquinaExpendedora.Libreria</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
