@@ -121,10 +121,11 @@ namespace MaquinaExpendedora.Consola
                 Console.WriteLine("Ingrese un código de la lista");
                 ListarCodigos(maquinaExpendedora);
                 string c = Helpers.ConsolaHelper.PedirString("Codigo");
+                Console.Clear();
                 Console.WriteLine(string.Format("Codigo: {0} - {1} {2}", c, maquinaExpendedora.ExisteCodigo(c).Nombre, maquinaExpendedora.ExisteCodigo(c).Sabor));
                 if(maquinaExpendedora.BuscarStockPorCodigo(c) == null)
                 {
-                    Console.WriteLine("No hay stock de " + maquinaExpendedora.ExisteCodigo(c).Nombre);
+                    Console.WriteLine("No hay stock de " + maquinaExpendedora.ExisteCodigo(c).Nombre + maquinaExpendedora.ExisteCodigo(c).Sabor);
                     double p = Helpers.ConsolaHelper.PedirDouble("Precio");
                     double v = Helpers.ConsolaHelper.PedirDouble("Volumen");
                     maquinaExpendedora.AgregarLata(c, p, v);
