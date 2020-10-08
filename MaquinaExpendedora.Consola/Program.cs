@@ -14,8 +14,8 @@ namespace MaquinaExpendedora.Consola
 
             bool continuarActivo = true;
 
-            string menu = "1)Listar códigos de latas \n2)Agregar lata \n3)Comprar lata \n4)Ver balance \n5)Listar latas en stock";
-            MaquinaExpendedora.Libreria.MaquinaExpendedora maquina = new Libreria.MaquinaExpendedora(12);
+            string menu = "1)Listar códigos de latas \n2)Agregar lata \n3)Comprar lata \n4)Ver balance \n5)Listar latas en stock \nX)Cerrar programa";
+            Libreria.MaquinaExpendedora maquina = new Libreria.MaquinaExpendedora(12);
 
             do
             {
@@ -48,10 +48,10 @@ namespace MaquinaExpendedora.Consola
                                 Program.AgregarLata(maquina);
                                 break;
 
-                            //case "3":
-                            //    // alta
-                            //    Program.ModificarPrecioRepuesto(viel);
-                            //    break;
+                            case "3":
+                                // alta
+                                Program.RetirarLata(maquina);
+                                break;
 
                             //case "4":
                             //    // alta
@@ -141,6 +141,44 @@ namespace MaquinaExpendedora.Consola
                 Console.WriteLine(ex.Message);
             }
             catch (Libreria.Exceptions.CodigoInvalidoException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static void RetirarLata(Libreria.MaquinaExpendedora maquinaExpendedora)
+        {
+            try
+            {
+                Console.WriteLine("Ingrese un código de la lista");
+                ListarCodigos(maquinaExpendedora);
+                string c = Helpers.ConsolaHelper.PedirString("Codigo");
+                Console.Clear();
+                Console.WriteLine(string.Format("Codigo: {0} - {1} {2}", c, maquinaExpendedora.ExisteCodigo(c).Nombre, maquinaExpendedora.ExisteCodigo(c).Sabor));
+
+                if (maquinaExpendedora.BuscarStockPorCodigo(c) == null)
+                {
+                    throw new Libreria.Exceptions.SinStockException(maquinaExpendedora.BuscarModeloPorCodigo(c).Nombre + " - " + maquinaExpendedora.BuscarModeloPorCodigo(c).Sabor);
+                }
+                else
+                {
+                    Console.WriteLine("No hay stock de " + maquinaExpendedora.ExisteCodigo(c).Nombre + maquinaExpendedora.ExisteCodigo(c).Sabor);
+                    double p = Helpers.ConsolaHelper.PedirDouble("Precio");
+                    maquinaExpendedora.RetirarLata(c, p);
+
+                    Console.WriteLine("Se retiró una lata de " + maquinaExpendedora.BuscarModeloPorCodigo(c).Nombre + " - " + maquinaExpendedora.BuscarModeloPorCodigo(c).Sabor);
+                }
+
+            }
+            catch(Libreria.Exceptions.SinStockException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Libreria.Exceptions.DineroInsuficienteException ex)
             {
                 Console.WriteLine(ex.Message);
             }

@@ -90,20 +90,10 @@ namespace MaquinaExpendedora.Libreria
             throw new CodigoInvalidoException(codigo);
         }
 
-        public Lata HayStock(string codigo)
-        {
-            foreach (Lata l in _latas)
-            {
-                if (codigo == l.Codigo && l.Precio != 0 && l.Volumen != 0)
-                    return l;
-            }
-            return null;
-        }
-
         public void AgregarLata(string codigo, double precio, double volumen)
         {
 
-                if (HayStock(codigo) != null)
+                if (BuscarStockPorCodigo(codigo) != null)
                 {
                     throw new SinCapacidadException(BuscarStockPorCodigo(codigo).Nombre + " " + BuscarStockPorCodigo(codigo).Sabor);
                 }
@@ -117,15 +107,15 @@ namespace MaquinaExpendedora.Libreria
 
         public void RetirarLata(string codigo, double dineroIngresado)
         {
-            if (HayStock(codigo) != null)
+            if (BuscarStockPorCodigo(codigo) != null)
             {
-                if (HayStock(codigo).Precio > dineroIngresado)
+                if (BuscarStockPorCodigo(codigo).Precio > dineroIngresado)
                 {
                     throw new DineroInsuficienteException("Se devuelven sus $" + dineroIngresado);
                 }
                 else
                 {
-                    this._latas.Remove(HayStock(codigo));
+                    this._latas.Remove(BuscarStockPorCodigo(codigo));
                 }
             }
             else
