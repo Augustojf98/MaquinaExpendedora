@@ -14,7 +14,7 @@ namespace MaquinaExpendedora.Consola
 
             bool continuarActivo = true;
 
-            string menu = "1)Listar códigos de latas \n2)Agregar lata \n3)Comprar lata \n4)Ver balance \n5)Listar latas en stock \nX)Cerrar programa";
+            string menu = "1)Listar códigos de latas \n2)Agregar lata \n3)Comprar lata \n4)Ver balance \n5)Listar latas en stock \n6)Limpiar pantalla \nX)Cerrar programa";
             Libreria.MaquinaExpendedora maquina = new Libreria.MaquinaExpendedora(12);
 
             do
@@ -28,7 +28,7 @@ namespace MaquinaExpendedora.Consola
 
                     // validamos si el input es válido (en este caso podemos tmb dejar que el switch se encargue en el default.
                     // lo dejo igual por las dudas si quieren usar el default del switch para otra cosa.
-                    if (Helpers.ValidadoresHelper.EsOpcionValida(opcionSeleccionada, "1234567X"))
+                    if (Helpers.ValidadoresHelper.EsOpcionValida(opcionSeleccionada, "123456X"))
                     {
                         if (opcionSeleccionada.ToUpper() == "X")
                         {
@@ -53,22 +53,17 @@ namespace MaquinaExpendedora.Consola
                                 Program.RetirarLata(maquina);
                                 break;
 
-                            //case "4":
-                            //    // alta
-                            //    Program.EliminarRepuesto(viel);
-                            //    break;
+                            case "4":
+                                // alta
+                                Program.VerBalance(maquina);
+                                break;
 
-                            //case "5":
-                            //    // borrar
-                            //    Program.AgregarStockRepuesto(viel);
-                            //    break;
+                            case "5":
+                                // mostrar stock
+                                Program.MostrarStock(maquina);
+                                break;
 
-                            //case "6":
-                            //    // borrar
-                            //    Program.QuitarStockRepuesto(viel);
-                            //    break;
-
-                            case "7":
+                            case "6":
                                 Console.Clear();
                                 break;
 
@@ -109,9 +104,25 @@ namespace MaquinaExpendedora.Consola
             }
         }
 
+        private static void MostrarStock(Libreria.MaquinaExpendedora maquina)
+        {
+            foreach (Lata lata in maquina.TraerStockLatas())
+            {
+                if (lata.Precio != 0 || lata.Volumen != 0)
+                {
+                    MostrarStock(lata);
+                }
+            }
+        }
+
         private static void MostrarCodigoNombre(Lata lata)
         {
             Console.WriteLine(lata.Codigo + " - " + lata.Nombre + " - " + lata.Sabor);
+        }
+
+        private static void MostrarStock(Lata lata)
+        {
+            Console.WriteLine(lata.Codigo + " - " + lata.Nombre + " - " + lata.Sabor + " - Stock: 1 unidad");
         }
 
         private static void AgregarLata(Libreria.MaquinaExpendedora maquinaExpendedora)
@@ -166,7 +177,7 @@ namespace MaquinaExpendedora.Consola
                 }
                 else
                 {
-                    Console.WriteLine("No hay stock de " + maquinaExpendedora.ExisteCodigo(c).Nombre + maquinaExpendedora.ExisteCodigo(c).Sabor);
+                    Console.WriteLine("Hay una lata de " + maquinaExpendedora.ExisteCodigo(c).Nombre + " - " + maquinaExpendedora.ExisteCodigo(c).Sabor + " en stock");
                     double p = Helpers.ConsolaHelper.PedirDouble("Precio");
                     maquinaExpendedora.RetirarLata(c, p);
 
@@ -186,6 +197,11 @@ namespace MaquinaExpendedora.Consola
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private static void VerBalance(Libreria.MaquinaExpendedora maquina)
+        {
+            Console.WriteLine(maquina.ToString());
         }
 
     }

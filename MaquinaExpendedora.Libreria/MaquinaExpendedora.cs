@@ -35,6 +35,29 @@ namespace MaquinaExpendedora.Libreria
             this._latas.Add(new Lata("FA2", "Fanta", "Zero"));
         }
 
+        public List<Lata> TraerStockLatas()
+        {
+
+            List<Lata> latas = new List<Lata>();
+
+            foreach (Lata lata in Latas)
+            {
+                if(lata.Precio != 0 || lata.Volumen != 0)
+                {
+                    latas.Add(lata);
+                }
+            }
+
+            if(latas.Count > 0)
+            {
+                return latas;
+            }
+            else
+            {
+                throw new SinStockException("Ninguna lata");
+            }
+        }
+
         public void EncenderMaquina()
         {
             if (!this._encendida)
@@ -92,36 +115,37 @@ namespace MaquinaExpendedora.Libreria
 
         public void AgregarLata(string codigo, double precio, double volumen)
         {
+            Lata lata = new Lata(codigo, BuscarModeloPorCodigo(codigo).Nombre, BuscarModeloPorCodigo(codigo).Sabor, precio, volumen);
 
-                if (BuscarStockPorCodigo(codigo) != null)
-                {
-                    throw new SinCapacidadException(BuscarStockPorCodigo(codigo).Nombre + " " + BuscarStockPorCodigo(codigo).Sabor);
-                }
-                else
-                {
-                    Lata lata = new Lata(codigo, BuscarModeloPorCodigo(codigo).Nombre, BuscarModeloPorCodigo(codigo).Sabor, precio, volumen);
-
-                    this._latas.Add(lata);
-                }
+            this._latas.Add(lata);
         }
 
         public void RetirarLata(string codigo, double dineroIngresado)
         {
-            if (BuscarStockPorCodigo(codigo) != null)
+            if (BuscarStockPorCodigo(codigo).Precio > dineroIngresado)
             {
-                if (BuscarStockPorCodigo(codigo).Precio > dineroIngresado)
-                {
-                    throw new DineroInsuficienteException("Se devuelven sus $" + dineroIngresado);
-                }
-                else
-                {
-                    this._latas.Remove(BuscarStockPorCodigo(codigo));
-                }
+                throw new DineroInsuficienteException("Se devuelven sus $" + dineroIngresado);
             }
             else
             {
-                throw new SinStockException("No hay stock para la lata seleccionada, de código " + codigo);
+                double vuelto = 0;
+
+                vuelto = dineroIngresado - BuscarStockPorCodigo(codigo).Precio;
+
+                this._latas.Remove(BuscarStockPorCodigo(codigo));
+
+                this._dinero = this._dinero + dineroIngresado - vuelto;
+
+                if (vuelto > 0)
+                {
+                    throw new Exception("Su vuelto es de $" + vuelto);
+                }
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Dinero acumulado: ${0} - Cantidad de latas en stock: {1} unidades", this._dinero, this.TraerStockLatas().Count());
         }
 
     }
