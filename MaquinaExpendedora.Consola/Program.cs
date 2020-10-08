@@ -122,7 +122,7 @@ namespace MaquinaExpendedora.Consola
 
         private static void MostrarStock(Lata lata)
         {
-            Console.WriteLine(lata.Codigo + " - " + lata.Nombre + " - " + lata.Sabor + " - Stock: 1 unidad");
+            Console.WriteLine(lata.ToString());
         }
 
         private static void AgregarLata(Libreria.MaquinaExpendedora maquinaExpendedora)
